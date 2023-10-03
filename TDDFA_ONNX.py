@@ -34,7 +34,7 @@ class TDDFA_ONNX(object):
                 shape_dim=kvs.get('shape_dim', 40),
                 exp_dim=kvs.get('exp_dim', 10)
             )
-        self.bfm_session = onnxruntime.InferenceSession(bfm_onnx_fp, None)
+        self.bfm_session = onnxruntime.InferenceSession(bfm_onnx_fp, providers=['CPUExecutionProvider'])
 
         # load for optimization
         bfm = BFMModel(bfm_fp, shape_dim=kvs.get('shape_dim', 40), exp_dim=kvs.get('exp_dim', 10))
@@ -57,7 +57,7 @@ class TDDFA_ONNX(object):
             print(f'{onnx_fp} does not exist, try to convert the `.pth` version to `.onnx` online')
             onnx_fp = convert_to_onnx(**kvs)
 
-        self.session = onnxruntime.InferenceSession(onnx_fp, None)
+        self.session = onnxruntime.InferenceSession(onnx_fp, providers=['CPUExecutionProvider'])
 
         # params normalization config
         r = _load(param_mean_std_fp)
